@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقاط صورة تلقائي</title>
+</head>
+<body>
+    <h1>التقاط صورة تلقائي</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+    <script>
+        // الوصول إلى كاميرا الويب
+        const video = document.getElementById('video');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+
+                // التقاط الصورة تلقائيًا بعد 5 ثوانٍ (5000 مللي ثانية)
+                setTimeout(() => {
+                    const canvas = document.getElementById('canvas');
+                    const context = canvas.getContext('2d');
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    // تحويل الصورة إلى بيانات Base64
+                    const imageData = canvas.toDataURL('image/png');
+
+                    // عرض بيانات الصورة في console
+                    console.log(imageData);
+                }, 5000); // 5000 مللي ثانية = 5 ثوانٍ
+            })
+            .catch(err => {
+                console.error("حدث خطأ أثناء الوصول إلى الكاميرا: " + err);
+            });
+    </script>
+</body>
+</html>
